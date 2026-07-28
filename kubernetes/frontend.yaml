@@ -31,21 +31,19 @@ spec:
           args:
             - run
             - dev
+            - --
             - --host
             - "0.0.0.0"
+            - --force
+
+          env:
+            - name: CHOKIDAR_USEPOLLING
+              value: "true"
 
           ports:
             - containerPort: 5173
 
           imagePullPolicy: IfNotPresent
-
-          resources:
-            requests:
-              cpu: "100m"
-              memory: "256Mi"
-            limits:
-              cpu: "500m"
-              memory: "512Mi"
 
 
 ---
@@ -66,5 +64,4 @@ spec:
   ports:
     - port: 5173
       targetPort: 5173
-      protocol: TCP
       nodePort: 31000
