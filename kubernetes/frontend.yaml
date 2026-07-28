@@ -1,36 +1,68 @@
 apiVersion: apps/v1
 kind: Deployment
+
 metadata:
   name: frontend-deployment
   namespace: wanderlust
   labels:
     app: frontend
+
 spec:
   replicas: 1
+
   selector:
     matchLabels:
       app: frontend
+
   template:
     metadata:
-      name: frontend
       labels:
         app: frontend
+
     spec:
       containers:
         - name: frontend
+
           image: madhupdevops/wanderlust-frontend-beta:v3.0.18
+
+          command:
+            - npm
+
+          args:
+            - run
+            - dev
+            - --host
+            - "0.0.0.0"
+
           ports:
             - containerPort: 5173
+
+          imagePullPolicy: IfNotPresent
+
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+
+
 ---
+
 apiVersion: v1
 kind: Service
+
 metadata:
   name: frontend-service
   namespace: wanderlust
+
 spec:
   type: NodePort
+
   selector:
     app: frontend
+
   ports:
     - port: 5173
       targetPort: 5173
